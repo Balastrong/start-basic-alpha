@@ -19,140 +19,74 @@ import {
   createServerFileRoute,
 } from '@tanstack/react-start/server'
 
-import { ServerRoute as CustomScriptDotjsRouteImport } from './../../src/routes/customScript[.]js'
-import { ServerRoute as ApiUsersRouteImport } from './../../src/routes/api/users'
-import { ServerRoute as ApiUsersUserIdRouteImport } from './../../src/routes/api/users.$userId'
+import { ServerRoute as ApiAuthSplatRouteImport } from './../../src/routes/api/auth.$'
 
 // Create/Update Routes
 
 const rootRoute = createServerRoute()
 
-const CustomScriptDotjsRoute = CustomScriptDotjsRouteImport.update({
-  id: '/customScript.js',
-  path: '/customScript.js',
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
   getParentRoute: () => rootRoute,
-} as any)
-
-const ApiUsersRoute = ApiUsersRouteImport.update({
-  id: '/api/users',
-  path: '/api/users',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const ApiUsersUserIdRoute = ApiUsersUserIdRouteImport.update({
-  id: '/$userId',
-  path: '/$userId',
-  getParentRoute: () => ApiUsersRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-start/server' {
   interface FileRoutesByPath {
-    '/customScript.js': {
-      id: '/customScript.js'
-      path: '/customScript.js'
-      fullPath: '/customScript.js'
-      preLoaderRoute: typeof CustomScriptDotjsRouteImport
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRoute
-    }
-    '/api/users': {
-      id: '/api/users'
-      path: '/api/users'
-      fullPath: '/api/users'
-      preLoaderRoute: typeof ApiUsersRouteImport
-      parentRoute: typeof rootRoute
-    }
-    '/api/users/$userId': {
-      id: '/api/users/$userId'
-      path: '/$userId'
-      fullPath: '/api/users/$userId'
-      preLoaderRoute: typeof ApiUsersUserIdRouteImport
-      parentRoute: typeof ApiUsersRouteImport
     }
   }
 }
 
 // Add type-safety to the createFileRoute function across the route tree
 
-declare module './../../src/routes/customScript[.]js' {
+declare module './../../src/routes/api/auth.$' {
   const createServerFileRoute: CreateServerFileRoute<
-    FileRoutesByPath['/customScript.js']['parentRoute'],
-    FileRoutesByPath['/customScript.js']['id'],
-    FileRoutesByPath['/customScript.js']['path'],
-    FileRoutesByPath['/customScript.js']['fullPath'],
-    unknown
-  >
-}
-declare module './../../src/routes/api/users' {
-  const createServerFileRoute: CreateServerFileRoute<
-    FileRoutesByPath['/api/users']['parentRoute'],
-    FileRoutesByPath['/api/users']['id'],
-    FileRoutesByPath['/api/users']['path'],
-    FileRoutesByPath['/api/users']['fullPath'],
-    ApiUsersRouteChildren
-  >
-}
-declare module './../../src/routes/api/users.$userId' {
-  const createServerFileRoute: CreateServerFileRoute<
-    FileRoutesByPath['/api/users/$userId']['parentRoute'],
-    FileRoutesByPath['/api/users/$userId']['id'],
-    FileRoutesByPath['/api/users/$userId']['path'],
-    FileRoutesByPath['/api/users/$userId']['fullPath'],
+    FileRoutesByPath['/api/auth/$']['parentRoute'],
+    FileRoutesByPath['/api/auth/$']['id'],
+    FileRoutesByPath['/api/auth/$']['path'],
+    FileRoutesByPath['/api/auth/$']['fullPath'],
     unknown
   >
 }
 
 // Create and export the route tree
 
-interface ApiUsersRouteChildren {
-  ApiUsersUserIdRoute: typeof ApiUsersUserIdRoute
-}
-
-const ApiUsersRouteChildren: ApiUsersRouteChildren = {
-  ApiUsersUserIdRoute: ApiUsersUserIdRoute,
-}
-
-const ApiUsersRouteWithChildren = ApiUsersRoute._addFileChildren(
-  ApiUsersRouteChildren,
-)
-
 export interface FileRoutesByFullPath {
-  '/customScript.js': typeof CustomScriptDotjsRoute
-  '/api/users': typeof ApiUsersRouteWithChildren
-  '/api/users/$userId': typeof ApiUsersUserIdRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
 }
 
 export interface FileRoutesByTo {
-  '/customScript.js': typeof CustomScriptDotjsRoute
-  '/api/users': typeof ApiUsersRouteWithChildren
-  '/api/users/$userId': typeof ApiUsersUserIdRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/customScript.js': typeof CustomScriptDotjsRoute
-  '/api/users': typeof ApiUsersRouteWithChildren
-  '/api/users/$userId': typeof ApiUsersUserIdRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/customScript.js' | '/api/users' | '/api/users/$userId'
+  fullPaths: '/api/auth/$'
   fileRoutesByTo: FileRoutesByTo
-  to: '/customScript.js' | '/api/users' | '/api/users/$userId'
-  id: '__root__' | '/customScript.js' | '/api/users' | '/api/users/$userId'
+  to: '/api/auth/$'
+  id: '__root__' | '/api/auth/$'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  CustomScriptDotjsRoute: typeof CustomScriptDotjsRoute
-  ApiUsersRoute: typeof ApiUsersRouteWithChildren
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  CustomScriptDotjsRoute: CustomScriptDotjsRoute,
-  ApiUsersRoute: ApiUsersRouteWithChildren,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 
 export const routeTree = rootRoute
@@ -165,22 +99,11 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/customScript.js",
-        "/api/users"
+        "/api/auth/$"
       ]
     },
-    "/customScript.js": {
-      "filePath": "customScript[.]js.ts"
-    },
-    "/api/users": {
-      "filePath": "api/users.ts",
-      "children": [
-        "/api/users/$userId"
-      ]
-    },
-    "/api/users/$userId": {
-      "filePath": "api/users.$userId.ts",
-      "parent": "/api/users"
+    "/api/auth/$": {
+      "filePath": "api/auth.$.ts"
     }
   }
 }
